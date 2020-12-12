@@ -12,7 +12,7 @@
 /* key matrix size */
 #define MATRIX_ROWS 5
 #define MATRIX_COLS 15
-
+#define RGBLIGHT_LAYERS
 /*
  * Keyboard Matrix Assignments
  *
@@ -40,9 +40,9 @@
 #ifdef RGB_DI_PIN
 #    define RGBLIGHT_ANIMATIONS
 #    define RGBLED_NUM 16
-#    define RGBLIGHT_HUE_STEP 8
-#    define RGBLIGHT_SAT_STEP 8
-#    define RGBLIGHT_VAL_STEP 8
+#    define RGBLIGHT_HUE_STEP 1
+#    define RGBLIGHT_SAT_STEP 1
+#    define RGBLIGHT_VAL_STEP 1
 #    define RGBLIGHT_SLEEP
 #endif
 

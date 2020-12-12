@@ -507,6 +507,51 @@ void rgblight_sethsv_eeprom_helper(uint8_t hue, uint8_t sat, uint8_t val, bool w
                 rgblight_set();
             }
 #endif
+#ifdef RGBLIGHT_EFFECT_STATIC_NONRAINBOW
+            else if (rgblight_status.base_mode == RGBLIGHT_MODE_STATIC_NONRAINBOW) {
+                // static nonrainbow
+                uint8_t delta = rgblight_config.mode - rgblight_status.base_mode;
+
+                uint8_t total = rgblight_ranges.effect_num_leds;
+                uint8_t half = rgblight_ranges.effect_num_leds / 2;
+
+                for (uint8_t i = 0; i < total; i++) {
+                    uint8_t offsetI = i + delta + 1;
+                    if( offsetI > total ) {
+                        offsetI = offsetI - total;
+                    }
+                    
+                    uint8_t _hue = ( offsetI <= half ) ? val : hue;
+                    sethsv(_hue, sat, 255, (LED_TYPE *)&led[i + rgblight_ranges.effect_start_pos]);
+                }
+                rgblight_set();
+            }
+#endif
+#ifdef RGBLIGHT_EFFECT_STATIC_COMPLEMENTARY
+            else if (rgblight_status.base_mode == RGBLIGHT_MODE_STATIC_COMPLEMENTARY) {
+                // static complementary(ish) 
+                // (the quantum color wheel is out of proportion)
+                uint8_t delta = rgblight_config.mode - rgblight_status.base_mode;
+
+                uint8_t total = rgblight_ranges.effect_num_leds;
+                uint8_t numDivisions = ( val % total ) + 1;
+                uint8_t baseColor = 0 + hue;
+                uint8_t complement = 127 + hue;
+
+                for (uint8_t i = 0; i < total; i++) {
+                    uint8_t offsetI = i + delta + 1;
+                    if( offsetI > total ) {
+                        offsetI = offsetI - total;
+                    }
+
+                    uint8_t segment = ceil( offsetI / numDivisions );
+                    
+                    uint8_t _hue = ( segment % 2 == 0 ) ? baseColor : complement;
+                    sethsv(_hue, sat, 255, (LED_TYPE *)&led[i + rgblight_ranges.effect_start_pos]);
+                }
+                rgblight_set();
+            }
+#endif
         }
 #ifdef RGBLIGHT_SPLIT
         if (rgblight_config.hue != hue || rgblight_config.sat != sat || rgblight_config.val != val) {

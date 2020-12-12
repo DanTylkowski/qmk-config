@@ -201,6 +201,12 @@ bool process_rgb(const uint16_t keycode, const keyrecord_t *record) {
 #if defined(RGBLIGHT_ENABLE) && !defined(RGBLIGHT_DISABLE_KEYCODES) && defined(RGBLIGHT_EFFECT_STATIC_GRADIENT)
                 handleKeycodeRGBMode(RGBLIGHT_MODE_STATIC_GRADIENT, RGBLIGHT_MODE_STATIC_GRADIENT_end);
 #endif
+#if defined(RGBLIGHT_ENABLE) && !defined(RGBLIGHT_DISABLE_KEYCODES) && defined(RGBLIGHT_EFFECT_STATIC_NONRAINBOW)
+                handleKeycodeRGBMode(RGBLIGHT_MODE_STATIC_NONRAINBOW, RGBLIGHT_MODE_STATIC_NONRAINBOW_end);
+#endif
+#if defined(RGBLIGHT_ENABLE) && !defined(RGBLIGHT_DISABLE_KEYCODES) && defined(RGBLIGHT_EFFECT_STATIC_COMPLEMENTARY)
+                handleKeycodeRGBMode(RGBLIGHT_MODE_STATIC_COMPLEMENTARY, RGBLIGHT_MODE_STATIC_COMPLEMENTARY_end);
+#endif
                 return false;
             case RGB_MODE_RGBTEST:
 #if defined(RGBLIGHT_ENABLE) && !defined(RGBLIGHT_DISABLE_KEYCODES) && defined(RGBLIGHT_EFFECT_RGB_TEST)

@@ -17,8 +17,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     P1 (26) -> heavy tactile (burnt_orange)
     P2 (5)  -> medium tactile (brown)
     P3 (4)  -> light-medium linear (silver)
-    P4 (4)  -> medium thick (jade)
-    P5 (3)  -> medium click (white/robin)
+    P4 (4)  -> medium thick (white/robin)
+    P5 (3)  -> medium click (jade)
   */
 
   /* Default

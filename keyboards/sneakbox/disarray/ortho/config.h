@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* #define NUMBER_OF_ENCODERS 1 */
 #define ENCODERS_PAD_A { B3 }
 #define ENCODERS_PAD_B { B2 }
-#define ENCODER_RESOLUTION 1
+#define ENCODER_RESOLUTION 4
 
 
 /* key matrix size */

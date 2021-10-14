@@ -58,18 +58,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
-        if (clockwise) {
-            tap_code(KC_VOLD);
-        } else {
-            tap_code(KC_VOLU);
-        }
-    } else if (index == 1) { /* Second encoder */
-        if (clockwise) {
-            tap_code(KC_VOLD);
-        } else {
-            tap_code(KC_VOLU);
-        }
+    if (clockwise) {
+        tap_code(KC_MS_WH_UP);
+    } else {
+        tap_code(KC_MS_WH_DOWN);
+    }
+    return true;
+}
+
+bool led_update_kb(led_t led_state) {
+    bool res = led_update_user(led_state);
+    if(res) {
+        writePin(B1, led_state.caps_lock);
+    }
+    return res;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch( keycode ) {
+        case LT(0, KC_NO):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_SPC));
+            } else if (record->event.pressed) {
+                register_code(KC_LCTL);
+                register_code(KC_LALT);
+            } else {
+                unregister_code(KC_LCTL);
+                unregister_code(KC_LALT);
+            }
+        return false;
     }
     return true;
 }

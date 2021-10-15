@@ -57,11 +57,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS,       KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS),
 };
 
+static const uint16_t ENCODER_TOGGLE_KEY = KC_MHEN;
+static const uint16_t ALFRED_MOD_KEY = LT(0, KC_NO);
+
+enum Mode {
+    SCROLL,
+    WINDOW,
+    APPS,
+
+    _NUM_MODES,
+};
+
+static enum Mode cur_mode = SCROLL;
+static enum Mode throttle = SCROLL;
+
+
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        tap_code(KC_MS_WH_UP);
-    } else {
-        tap_code(KC_MS_WH_DOWN);
+    switch (cur_mode) {
+        case SCROLL:
+            tap_code(clockwise ? KC_MS_WH_DOWN : KC_MS_WH_UP);
+            break;
+
+        case WINDOW:
+            if(throttle == 0 ) {
+                tap_code16(clockwise ? LGUI(KC_GRV) : LSG(KC_GRV));
+            }
+            throttle = (throttle + 1) % 8;
+            break;
+        case APPS:
+            if(throttle == 0 ) {
+                tap_code16(clockwise ? LSG(KC_TAB) : LGUI(KC_TAB));
+            }
+            throttle = (throttle + 1) % 8;
+            break;
+
+        default:
+            break;
     }
     return true;
 }
@@ -76,15 +107,21 @@ bool led_update_kb(led_t led_state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch( keycode ) {
-        case LT(0, KC_NO):
+        case ALFRED_MOD_KEY:
             if (record->tap.count && record->event.pressed) {
                 tap_code16(C(KC_SPC));
             } else if (record->event.pressed) {
                 register_code(KC_LCTL);
                 register_code(KC_LALT);
             } else {
-                unregister_code(KC_LCTL);
-                unregister_code(KC_LALT);
+                clear_mods();
+            }
+        return false;
+        case ENCODER_TOGGLE_KEY:
+            if (record->event.pressed) {
+                cur_mode = (cur_mode + 1) % _NUM_MODES;
+            } else {
+                clear_keyboard();
             }
         return false;
     }

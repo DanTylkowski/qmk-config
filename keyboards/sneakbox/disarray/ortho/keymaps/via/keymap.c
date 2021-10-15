@@ -114,14 +114,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 register_code(KC_LCTL);
                 register_code(KC_LALT);
             } else {
-                clear_mods();
+                unregister_code(KC_LCTL);
+                unregister_code(KC_LALT);
             }
         return false;
         case ENCODER_TOGGLE_KEY:
             if (record->event.pressed) {
                 cur_mode = (cur_mode + 1) % _NUM_MODES;
-            } else {
-                clear_keyboard();
             }
         return false;
     }
